@@ -37,12 +37,12 @@ export default {
     },
 
     methods: {
-        checkForm: function(e) {
-            e.preventDefault()
+        checkForm: function(event) {
+            event.preventDefault()
         },
 
-        sendForm: function(e) {
-            e.preventDefault()
+        sendForm: function(event) {
+            event.preventDefault()
 
             axios({
                 method: 'post',
@@ -51,15 +51,17 @@ export default {
                     'username': this.username,
                     'password': this.password,
                 }
-            }).then((response)=> {
+            }).then((response) => {
                 this.username = ''
                 this.password = ''
-                console.log(response.data);
-            }).catch((err)=> {
+                document.cookie = `token=${response.data.token}`
+                this.$router.push({ name: 'Main' })
+                this.$emit('logedIn')
+            }).catch((err) => {
                 console.error(err)
             })
-        }
-    }
+        },
+    },
 }
 </script>
 
