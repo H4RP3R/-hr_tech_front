@@ -36,6 +36,8 @@ export default {
         }
     },
 
+    props: ['token'],
+
     methods: {
         checkForm: function(event) {
             event.preventDefault()
@@ -62,6 +64,12 @@ export default {
             })
         },
     },
+
+    created() {
+        if (this.token) {
+            this.$router.push({ name: 'Main' })
+        }
+    }
 }
 </script>
 

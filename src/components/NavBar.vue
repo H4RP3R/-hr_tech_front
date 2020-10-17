@@ -2,6 +2,9 @@
 <div class="">
     <nav>
         <router-link to="/">Main</router-link> |
+        <span v-if="userData.is_hr_staff">
+            <router-link to="/admin">Admin</router-link> |
+        </span>
         <span v-if="token">
             <a href="" v-on:click="deleteToken">Logout</a> |
         </span>
@@ -14,7 +17,7 @@
 
 <script>
 export default {
-    name: 'NavBar',
+    name: 'nav-bar',
 
     methods: {
         deleteToken: function() {
@@ -22,7 +25,7 @@ export default {
         }
     },
 
-    props: ['token']
+    props: ['token', 'userData']
 }
 </script>
 
