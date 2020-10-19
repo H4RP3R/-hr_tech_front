@@ -1,12 +1,16 @@
 <template>
 <div id="app">
-    <NavBar :token="token" :userData="userData" />
-    <router-view v-on:logedIn="getToken" v-bind:token="token" />
+    <div class="page-wrapper">
+        <NavBar :token="token" :userData="userData" />
+        <router-view v-on:logedIn="getToken" v-bind:token="token" />
+    </div>
+    <question-form v-on:closeForm="turOffBlur" />
 </div>
 </template>
 
 <script>
-import NavBar from './components/NavBar.vue'
+import NavBar from '@/components/NavBar.vue'
+import QuestionForm from '@/components/QuestionForm.vue'
 import axios from 'axios'
 
 
@@ -24,6 +28,7 @@ export default {
 
     components: {
         NavBar,
+        QuestionForm,
     },
 
     methods: {
@@ -45,11 +50,16 @@ export default {
             axios.get(URL + 'current_user_data/', config)
                 .then((response) => {
                     this.userData = response.data
+                    this.userData.token = this.token
                     this.$store.commit('SET_USER_DATA', this.userData)
                 })
                 .catch((err) => {
                     console.log(err);
                 })
+        },
+
+        turOffBlur: function() {
+            document.querySelector('.page-wrapper').classList.remove('blur')
         }
     },
 
@@ -69,6 +79,15 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.blur {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+    z-index: -1;
 }
 
 </style>

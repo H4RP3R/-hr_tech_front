@@ -36,8 +36,8 @@ export default {
 
 <style scoped>
 .wrapper {
-    background-color: blue;
-    width: 1140px;
+    min-width: 960px;
+    max-width: 1140px;
     display: flex;
     flex-direction: row;
 }
