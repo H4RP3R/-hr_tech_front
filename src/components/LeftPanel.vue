@@ -1,6 +1,6 @@
 <template>
 <div class="panel">
-    <h2>{{ userData.username }}</h2>
+    <h2>Hi, {{ userData.username }}</h2>
     <big-button bttnText="add question" :bttnFunction="addNewQuestion" /><br>
     <big-button bttnText="add questionnaire" :bttnFunction="addNewQuestionnaire" />
 </div>
@@ -42,7 +42,15 @@ export default {
 </script>
 
 <style scoped>
+h2 {
+    color: rgba(85, 76, 185, 0.9);
+    text-decoration: underline;
+}
+
 .panel {
-    width: 33%;
+    width: 30%;
+    border-right: solid 1px rgb(0, 0, 0, 0.1);
+    margin-right: 8px;
+    padding-right: 8px;
 }
 </style>

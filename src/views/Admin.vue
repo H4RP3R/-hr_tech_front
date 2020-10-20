@@ -1,33 +1,36 @@
 <template>
 <div class="wrapper">
     <left-panel />
+    <div class="panel">
+        <tabs-block />
+        <question-list />
+    </div>
 </div>
 </template>
 
 <script>
 import LeftPanel from '@/components/LeftPanel.vue'
-
+import QuestionList from '@/components/QuestionList.vue'
+import TabsBlock from '@/components/TabsBlock.vue'
 
 export default {
     name: 'Main',
 
-    methods: {
-        getCookieValue: function(a) {
-            const b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)')
-            return b ? b.pop() : ''
-        }
-    },
+    methods: {},
 
     components: {
         LeftPanel,
+        QuestionList,
+        TabsBlock,
     },
 
     props: ['userData'],
 
     created() {
-        const token = this.getCookieValue('token')
+        const token = this.token = this.$cookies.get('token')
         if (!token) {
             this.$router.push({ name: 'Login' })
+            this.$store.commit('SET_USER_DATA', null)
         }
     }
 
@@ -35,10 +38,9 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-    min-width: 960px;
-    max-width: 1140px;
-    display: flex;
-    flex-direction: row;
+.right-panel {
+    width: 70%;
+    border: solid 1px rgba(0, 0, 0, 0.1);
+    padding: 8px;
 }
 </style>

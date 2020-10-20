@@ -1,7 +1,7 @@
 <template>
 <div id="app">
+    <nav-bar :token="token" :userData="userData" />
     <div class="page-wrapper">
-        <NavBar :token="token" :userData="userData" />
         <router-view v-on:logedIn="getToken" v-bind:token="token" />
     </div>
     <question-form v-on:closeForm="turOffBlur" />
@@ -33,8 +33,7 @@ export default {
 
     methods: {
         getToken: function() {
-            const b = document.cookie.match('(^|;)\\s*' + 'token' + '\\s*=\\s*([^;]+)')
-            this.token = b ? b.pop() : ''
+            this.token = this.$cookies.get('token')
             if (this.token) {
                 this.getUserProfile()
             }
@@ -73,6 +72,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&display=swap');
 
+* {
+    margin: 0;
+    padding: 0;
+}
+
 #app {
     font-family: 'Roboto', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -91,5 +95,23 @@ export default {
     -ms-filter: blur(4px);
     filter: blur(4px);
     z-index: -1;
+}
+
+.box-shadow {
+    -webkit-box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.32);
+    -moz-box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.32);
+    box-shadow: 0px 2px 5px -2px rgba(0, 0, 0, 0.32);
+}
+
+.wrapper {
+    min-width: 960px;
+    max-width: 1140px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.ck-editor__editable_inline {
+    min-height: 200px;
 }
 </style>

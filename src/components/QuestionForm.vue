@@ -116,7 +116,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+h2 {
+    margin: 20px;
+}
+
 .qestion-form {
     display: none;
     position: absolute;
@@ -124,12 +128,9 @@ export default {
     transform: translateY(-50%);
     width: 760px;
     border: solid 1px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.82);
     padding: 0 8px;
     font-size: 14px;
-}
-
-.ck-editor__editable_inline {
-    min-height: 200px;
 }
 
 .close {
@@ -193,6 +194,7 @@ input[type=number]:focus {
 
 input[type=submit] {
     border: solid 1px rgb(85, 76, 185);
+    padding: 0 2px;
     background-color: white;
     transition: 1s;
 }

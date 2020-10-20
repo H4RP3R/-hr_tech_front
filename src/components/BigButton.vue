@@ -18,9 +18,10 @@ export default {
     color: rgb(76, 185, 117);
     font-family: 'Comfortaa', cursive;
     font-weight: bold;
-    padding: 4px 10px;
-    margin: 2px;
+    padding: 6px 10px;
+    margin: 6px 2px 0 0;
     transition: 1s;
+    width: 180px;
 }
 
 .big-button:focus {
