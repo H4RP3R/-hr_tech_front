@@ -5,12 +5,14 @@
         <router-view v-on:logedIn="getToken" v-bind:token="token" />
     </div>
     <question-form v-on:closeForm="turOffBlur" />
+    <questionnaire-form  v-on:closeForm="turOffBlur" />
 </div>
 </template>
 
 <script>
 import NavBar from '@/components/NavBar.vue'
 import QuestionForm from '@/components/QuestionForm.vue'
+import QuestionnaireForm from '@/components/QuestionnaireForm.vue'
 import axios from 'axios'
 
 
@@ -29,6 +31,7 @@ export default {
     components: {
         NavBar,
         QuestionForm,
+        QuestionnaireForm,
     },
 
     methods: {

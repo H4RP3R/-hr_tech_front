@@ -25,7 +25,7 @@ export default {
         },
         addNewQuestionnaire: function() {
             document.querySelector('.page-wrapper').classList.add('blur')
-            document.querySelector('.qestion-form').style.display = 'block'
+            document.querySelector('.questionnaire-form').style.display = 'block'
         },
     },
 
