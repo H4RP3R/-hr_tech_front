@@ -1,7 +1,12 @@
 <template>
 <div class="qestion-form">
     <button class="close" @click="closeForm">X</button>
-    <h2>Question</h2>
+    <div v-if="questionId">
+        <h2>Question id: {{ questionId }}</h2>
+    </div>
+    <div v-else>
+        <h2>New Question</h2>
+    </div>
     <form class="" @submit="sendForm" action="" method="post">
         <ckeditor :editor="editor" v-model="text" :config="editorConfig"></ckeditor>
 
@@ -38,7 +43,7 @@
             <label for="score">Score</label>
             <input v-model="score" type="number" name="score" min="0"><br>
 
-            <input class="submit-bttn" type="submit" name="submit" value="Create">
+            <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
         </div>
     </form>
 </div>
@@ -47,9 +52,11 @@
 <script>
 import axios from 'axios'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { bus } from '../main'
 
 
-const URL = 'http://127.0.0.1:8000/questions/'
+const BASE_URL = 'http://127.0.0.1:8000/questions/'
+
 
 export default {
     name: 'question-form',
@@ -69,14 +76,23 @@ export default {
             editorData: '<p>Content of the editor.</p>',
             editorConfig: {
                 removePlugins: ['ImageToolbar', 'ImageUpload', 'MediaEmbed']
-            }
+            },
         }
     },
 
     methods: {
         closeForm: function() {
+            this.text = ''
+            this.answer1 = ''
+            this.answer2 = ''
+            this.answer3 = ''
+            this.answer4 = ''
+            this.hasCorrectAnswer = false
+            this.correctAnswers = []
+            this.score = 0
             document.querySelector('.qestion-form').style.display = 'none'
             this.$emit('closeForm')
+            this.$store.commit('SET_CURRENT_QUESTION_ID', null)
         },
 
         sendForm: function(event) {
@@ -86,10 +102,15 @@ export default {
                 Authorization: `Token ${this.$store.getters.USER_DATA.token}`
             }
 
-            const correctAnswers = this.correctAnswers.map(x => +x)
+            let correctAnswers = []
+            if (this.correctAnswers.length){
+                correctAnswers = this.correctAnswers.map(x => +x)
+            }
+            const method = this.questionId ? 'put' : 'post'
+            const URL = this.questionId ? BASE_URL + this.questionId : BASE_URL
 
             axios({
-                method: 'post',
+                method: method,
                 url: URL,
                 data: {
                     'text': this.text,
@@ -103,15 +124,48 @@ export default {
                 },
                 'headers': headers
             }).then(() => {
-                this.text = ''
-                this.answer1 = ''
-                this.answer2 = ''
-                this.answer3 = ''
-                this.answer4 = ''
+                this.closeForm()
+                bus.$emit('questionsUpdate')
             }).catch((err) => {
                 console.error(err)
             })
+        },
+
+        getQuestionById: function() {
+            const config = {
+                headers: {
+                    Authorization: `Token ${this.token = this.$cookies.get('token')}`
+                }
+            }
+
+            axios.get(BASE_URL + this.questionId, config)
+                .then(response => {
+                    this.text = response.data.text
+                    this.answer1 = response.data.answer1
+                    this.answer2 = response.data.answer2
+                    this.answer3 = response.data.answer3
+                    this.answer4 = response.data.answer4
+                    this.hasCorrectAnswer = response.data.has_correct_answer
+                    this.correctAnswers = response.data.correct_answers.split(',')
+                    this.score = response.data.score
+                })
+                .catch(err => {
+                    console.error(err)
+                })
         }
+    },
+
+    computed: {
+        questionId() {
+            return this.$store.getters.CURRENT_QUESTION_ID
+        },
+        bttnText() {
+            return (this.questionId ? 'Update' : 'Create')
+        },
+    },
+
+    created() {
+        bus.$on('haveId', this.getQuestionById);
     },
 }
 </script>

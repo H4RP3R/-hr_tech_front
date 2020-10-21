@@ -9,6 +9,8 @@ Vue.config.productionTip = false
 Vue.use(CKEditor)
 Vue.use(VueCookies)
 
+export const bus = new Vue();
+
 new Vue({
     router,
     store,

@@ -1,9 +1,9 @@
 <template>
 <div class="tabs">
-    <div class="tab">
+    <div @click="$emit('questionsClick')" class="tab">
         Questions
     </div>
-    <div class="tab">
+    <div @click="$emit('questionnairesClick')" class="tab">
         Questionnaires
     </div>
 </div>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-    name: 'tabs-block'
+    name: 'tabs-block',
 }
 </script>
 
