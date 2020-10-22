@@ -4,15 +4,21 @@
     <h2>New Questionnaire</h2>
     <form @submit="sendForm" action="" method="post">
         <label for="title">Title</label>
-        <input v-model="title" type="text" name="title" id="title" value=""><br>
-
+        <input v-model="title" type="text" name="title" id="title" value="">
         <input class="submit-bttn" type="submit" name="submit" value="Create">
+
+        <div class="headers">
+            <h3>All questions</h3>
+            <h3>All questions</h3>
+        </div>
+        <compact-question-list />
     </form>
 </div>
 </template>
 
 <script>
 import axios from 'axios'
+import CompactQuestionList from '@/components/CompactQuestionList.vue'
 
 
 const URL = 'http://127.0.0.1:8000/questionnaire/'
@@ -48,11 +54,15 @@ export default {
                 'headers': headers
             }).then(() => {
                 this.title = ''
-            }).catch(err=>{
+            }).catch(err => {
                 console.error(err)
             })
         }
     },
+
+    components: {
+        CompactQuestionList,
+    }
 }
 </script>
 
@@ -61,12 +71,18 @@ h2 {
     margin: 24px;
 }
 
+h3 {
+    font-family: 'Comfortaa', cursive;
+    margin: 4px 0;
+}
+
 .questionnaire-form {
     display: none;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 380px;
+    width: 960px;
+    max-height: 98vh;
     border: solid 1px rgba(0, 0, 0, 0.3);
     background: rgba(255, 255, 255, 0.82);
     padding: 0 8px;
@@ -79,12 +95,18 @@ h2 {
     margin-top: 6px;
     border: none;
     color: rgb(206, 20, 20);
-    background-color: white;
+    background: rgba(255, 255, 255, 0);
     font-size: 18px;
 }
 
 .close:focus {
     outline: none;
+}
+
+.headers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 label {

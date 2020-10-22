@@ -193,7 +193,7 @@ h2 {
     margin-top: 6px;
     border: none;
     color: rgb(206, 20, 20);
-    background-color: white;
+    background: rgba(255, 255, 255, 0);
     font-size: 18px;
 }
 

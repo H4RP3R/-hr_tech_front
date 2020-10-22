@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
     state: {
         userData: {},
         questionToEdit: null,
+        includedQuestions: [],
     },
     getters: {
         USER_DATA: state => {
@@ -15,6 +16,9 @@ export const store = new Vuex.Store({
         },
         CURRENT_QUESTION_ID: state => {
             return state.questionToEdit
+        },
+        INCLUDED_QUESTIONS: state => {
+            return state.includedQuestions
         }
     },
     mutations: {
@@ -26,6 +30,9 @@ export const store = new Vuex.Store({
             if (state.questionToEdit) {
                 bus.$emit('haveId')
             }
+        },
+        SET_INCLUDED_QUESTIONS: (state, payload) => {
+            state.includedQuestions = payload
         }
     },
 })
