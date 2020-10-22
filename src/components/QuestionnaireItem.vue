@@ -1,46 +1,55 @@
 <template>
-<div class="question-item box-shadow tooltip" @click="$emit('clickOn', question.id)">
+<div class="item  box-shadow tooltip">
     <div class="arrow-up"></div>
     <span class="tooltiptext">Click to edit</span>
-    <div class="item-header">
-        <b>id:</b> {{ question.id }}
+    <div>
+        <span>id: </span>{{ questionnaire.id }}
     </div>
-    <div class="inner-html" v-html="question.text"></div>
+    <div>
+        <span>title: </span>{{ questionnaire.title }}
+    </div>
+    <div>
+        <span>contains {{ questionnaire.questions.length }} </span>
+        <span v-if="questionsNum == 1">
+            question
+        </span>
+        <span v-else>questions</span>
+    </div>
 </div>
 </template>
 
 <script>
 export default {
-    name: 'question-item',
+    name: 'questionnaire-item',
 
-    props: ['question'],
+    props: ['questionnaire'],
+
+    computed: {
+        questionsNum: function() {
+            let n = 0
+            this.questionnaire.questions.forEach((item) => {
+                if (item) {
+                    n++
+                }
+            })
+            return n
+        }
+    }
 }
 </script>
 
 <style scoped>
-.question-item {
+.item {
     border: solid 1px rgba(0, 0, 0, 0.3);
     margin: 10px 4px;
     position: relative;
-}
-
-.item-header {
-    border-bottom: solid 1px rgba(0, 0, 0, 0.3);
-    font-family: 'Comfortaa', cursive;
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    font-family: 'Roboto', sans-serif;
     color: white;
     background: rgb(76, 185, 117);
     background: linear-gradient(90deg, rgba(76, 185, 117, 0.3) 0%, rgba(85, 76, 185, 0.5) 35%, rgba(0, 212, 255, 0.3) 100%);
-    padding: 1px;
-    padding-top: 2px;
-}
-
-.inner-html {
-    padding: 4px 22px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.9);
-    text-align: left;
 }
 
 .tooltip .tooltiptext {

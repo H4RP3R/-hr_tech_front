@@ -4,6 +4,7 @@
     <div class="right-panel">
         <tabs-block v-on:questionsClick="activateLeftTab" v-on:questionnairesClick="activateRightTab" />
         <question-list />
+        <questionnaire-list />
     </div>
 </div>
 </template>
@@ -11,6 +12,7 @@
 <script>
 import LeftPanel from '@/components/LeftPanel.vue'
 import QuestionList from '@/components/QuestionList.vue'
+import QuestionnaireList from '@/components/QuestionnaireList.vue'
 import TabsBlock from '@/components/TabsBlock.vue'
 
 export default {
@@ -19,16 +21,19 @@ export default {
     methods: {
         activateLeftTab: function() {
             document.querySelector('.questions').style.display = 'block'
+            document.querySelector('.questionnaires').style.display = 'none'
         },
 
         activateRightTab: function() {
             document.querySelector('.questions').style.display = 'none'
+            document.querySelector('.questionnaires').style.display = 'block'
         }
     },
 
     components: {
         LeftPanel,
         QuestionList,
+        QuestionnaireList,
         TabsBlock,
     },
 
