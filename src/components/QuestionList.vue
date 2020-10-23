@@ -1,7 +1,7 @@
 <template>
 <div class="questions">
     <div v-for="question in questions" :key="question.id">
-        <question-item :question="question" @clickOn="editQuestion"/>
+        <question-item :question="question" @clickOnQuestion="editQuestion"/>
     </div>
 </div>
 </template>
@@ -26,7 +26,7 @@ export default {
         getQuestions: function() {
             const config = {
                 headers: {
-                    Authorization: `Token ${this.token = this.$cookies.get('token')}`
+                    Authorization: `Token ${this.$cookies.get('token')}`
                 }
             }
 

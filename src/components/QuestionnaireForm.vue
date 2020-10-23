@@ -1,17 +1,22 @@
 <template>
 <div class="questionnaire-form">
     <button class="close" @click="closeForm">X</button>
-    <h2>New Questionnaire</h2>
+    <div v-if="questionnaireId">
+        <h2>Questionnaire id: {{ questionnaireId }}</h2>
+    </div>
+    <div v-else>
+        <h2>New Questionnaire</h2>
+    </div>
     <form @submit="sendForm" action="" method="post">
         <label for="title">Title</label>
         <input v-model="title" type="text" name="title" id="title" value="">
-        <input class="submit-bttn" type="submit" name="submit" value="Create">
+        <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
 
         <div class="headers">
             <h3>All questions</h3>
-            <h3>All questions</h3>
+            <h3>Drag here to include</h3>
         </div>
-        <compact-question-list />
+        <compact-question-list :questions="questions" :includedQuestions="includedQuestions" />
     </form>
 </div>
 </template>
@@ -19,9 +24,10 @@
 <script>
 import axios from 'axios'
 import CompactQuestionList from '@/components/CompactQuestionList.vue'
+import { bus } from '../main'
 
 
-const URL = 'http://127.0.0.1:8000/questionnaire/'
+const BASE_URL = 'http://127.0.0.1:8000/'
 
 export default {
     name: 'questionnaire-form',
@@ -29,6 +35,8 @@ export default {
     data() {
         return {
             title: '',
+            questions: [],
+            includedQuestions: [],
         }
     },
 
@@ -41,27 +49,96 @@ export default {
         sendForm: function(event) {
             event.preventDefault()
 
+            const method = this.questionnaireId ? 'put' : 'post'
+            const URL = this.questionnaireId ? BASE_URL + 'questionnaire/' + this.questionnaireId :
+                BASE_URL + 'questionnaire/'
             const headers = {
                 Authorization: `Token ${this.$store.getters.USER_DATA.token}`
             }
 
             axios({
-                method: 'post',
+                method: method,
                 url: URL,
                 data: {
                     'title': this.title,
+                    'questions': this.$store.getters.INCLUDED_QUESTIONS.map(q => q.id)
                 },
                 'headers': headers
             }).then(() => {
                 this.title = ''
+                bus.$emit('questionnaireUpdate')
+                this.closeForm()
             }).catch(err => {
                 console.error(err)
             })
-        }
+        },
+
+        getQuestionnaireById: function() {
+            const config = {
+                headers: {
+                    Authorization: `Token ${this.$cookies.get('token')}`
+                }
+            }
+
+            axios.get(BASE_URL + 'questionnaire/' + this.questionnaireId, config)
+                .then(response => {
+                    this.title = response.data.title
+                    this.includedQuestions = response.data.questions
+                    this.getQuestions()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        },
+
+        getQuestions: function() {
+            const token = this.$cookies.get('token')
+
+            if (!token) {
+                return
+            }
+
+            const config = {
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            }
+
+            axios.get(BASE_URL + 'questions/', config)
+                .then(response => {
+                    if (!this.includedQuestions.length) {
+                        this.questions = response.data
+                    } else {
+                        let questions = response.data
+                        questions.forEach((item) => {
+                            if (this.includedQuestions.map(x => x.id).includes(item.id)) {
+                                questions = questions.filter(i => i !== item)
+                            }
+                        })
+                        this.questions = questions
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+        },
+    },
+
+    computed: {
+        questionnaireId() {
+            return this.$store.getters.CURRENT_QUESTIONNAIRE_ID
+        },
+        bttnText() {
+            return (this.questionnaireId ? 'Update' : 'Create')
+        },
     },
 
     components: {
         CompactQuestionList,
+    },
+
+    created() {
+        bus.$on('haveQuestionnaireId', this.getQuestionnaireById);
     }
 }
 </script>

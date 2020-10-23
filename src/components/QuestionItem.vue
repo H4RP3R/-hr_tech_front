@@ -1,5 +1,5 @@
 <template>
-<div class="question-item box-shadow tooltip" @click="$emit('clickOn', question.id)">
+<div class="question-item box-shadow tooltip" @click="$emit('clickOnQuestion', question.id)">
     <div class="arrow-up"></div>
     <span class="tooltiptext">Click to edit</span>
     <div class="item-header">

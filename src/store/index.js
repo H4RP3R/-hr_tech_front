@@ -8,6 +8,7 @@ export const store = new Vuex.Store({
     state: {
         userData: {},
         questionToEdit: null,
+        questionnaireToEdit: null,
         includedQuestions: [],
     },
     getters: {
@@ -16,6 +17,9 @@ export const store = new Vuex.Store({
         },
         CURRENT_QUESTION_ID: state => {
             return state.questionToEdit
+        },
+        CURRENT_QUESTIONNAIRE_ID: state => {
+            return state.questionnaireToEdit
         },
         INCLUDED_QUESTIONS: state => {
             return state.includedQuestions
@@ -28,7 +32,13 @@ export const store = new Vuex.Store({
         SET_CURRENT_QUESTION_ID: (state, payload) => {
             state.questionToEdit = payload
             if (state.questionToEdit) {
-                bus.$emit('haveId')
+                bus.$emit('haveQuestionId')
+            }
+        },
+        SET_CURRENT_QUESTIONNAIRE_ID: (state, payload) => {
+            state.questionnaireToEdit = payload
+            if (state.questionnaireToEdit) {
+                bus.$emit('haveQuestionnaireId')
             }
         },
         SET_INCLUDED_QUESTIONS: (state, payload) => {

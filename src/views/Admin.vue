@@ -53,6 +53,8 @@ export default {
 <style scoped>
 .right-panel {
     width: 70%;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
     border: solid 1px rgba(0, 0, 0, 0.1);
     padding: 8px;
 }

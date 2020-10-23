@@ -165,7 +165,7 @@ export default {
     },
 
     created() {
-        bus.$on('haveId', this.getQuestionById);
+        bus.$on('haveQuestionId', this.getQuestionById);
     },
 }
 </script>

@@ -2,7 +2,7 @@
 <div class="wrapper">
     <draggable class="list question-list" :list="questions" group="q">
         <div v-for="question in questions" :key="question.id">
-            <compact-question-item :question="question" class="item"/>
+            <compact-question-item :question="question" class="item" />
         </div>
     </draggable>
 
@@ -15,52 +15,27 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
 import draggable from 'vuedraggable'
 import CompactQuestionItem from '@/components/CompactQuestionItem.vue'
 
-const URL = 'http://127.0.0.1:8000/questions/'
+// const URL = 'http://127.0.0.1:8000/questions/'
 
 export default {
     name: 'compact-question-list',
 
-    data() {
-        return {
-            questions: [],
-            includedQuestions: [],
-        }
-    },
+    props: ['questions', 'includedQuestions'],
 
     methods: {
-        getQuestions: function() {
-            const config = {
-                headers: {
-                    Authorization: `Token ${this.token = this.$cookies.get('token')}`
-                }
-            }
-
-            axios.get(URL, config)
-                .then(response => {
-                    this.questions = response.data
-                })
-                .catch(err => {
-                    console.error(err);
-                })
-        },
-
         commitChanges: function() {
             this.$store.commit('SET_INCLUDED_QUESTIONS', this.includedQuestions)
-        }
+        },
     },
 
     components: {
         draggable,
         CompactQuestionItem,
     },
-
-    mounted() {
-        this.getQuestions()
-    }
 }
 </script>
 
@@ -84,9 +59,7 @@ export default {
     display: none;
 }
 
-.item:hover {
-
-}
+.item:hover {}
 
 .question-list {
     width: 48%;

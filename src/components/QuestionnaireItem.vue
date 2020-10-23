@@ -1,5 +1,5 @@
 <template>
-<div class="item  box-shadow tooltip">
+<div class="item  box-shadow tooltip" @click="$emit('clickOnQuestionnaire', questionnaire.id)">
     <div class="arrow-up"></div>
     <span class="tooltiptext">Click to edit</span>
     <div>
