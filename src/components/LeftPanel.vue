@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 h2 {
-    color: rgba(85, 76, 185, 0.9);
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: underline;
 }
 

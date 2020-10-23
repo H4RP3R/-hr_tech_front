@@ -16,6 +16,7 @@
             <h3>All questions</h3>
             <h3>Drag here to include</h3>
         </div>
+        <p>⟺</p>
         <compact-question-list :questions="questions" :includedQuestions="includedQuestions" />
     </form>
 </div>
@@ -44,6 +45,9 @@ export default {
         closeForm: function() {
             document.querySelector('.questionnaire-form').style.display = 'none'
             this.$emit('closeForm')
+            this.includedQuestions = []
+            this.$store.commit('SET_CURRENT_QUESTIONNAIRE_ID', null)
+            this.title = ''
         },
 
         sendForm: function(event) {
@@ -111,7 +115,8 @@ export default {
                     } else {
                         let questions = response.data
                         questions.forEach((item) => {
-                            if (this.includedQuestions.map(x => x.id).includes(item.id)) {
+                            if (this.includedQuestions.map(x => x.id).includes(item
+                                    .id)) {
                                 questions = questions.filter(i => i !== item)
                             }
                         })
@@ -138,7 +143,9 @@ export default {
     },
 
     created() {
+        this.getQuestions()
         bus.$on('haveQuestionnaireId', this.getQuestionnaireById);
+        bus.$on('questionsUpdate', this.getQuestions)
     }
 }
 </script>

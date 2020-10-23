@@ -15,12 +15,12 @@ export default {
     text-transform: uppercase;
     border: solid 1px rgb(76, 185, 117);
     background-color: white;
-    color: rgb(76, 185, 117);
+    color: rgba(0, 0, 0, 0.7);
     font-family: 'Comfortaa', cursive;
     font-weight: bold;
     padding: 6px 10px;
     margin: 6px 2px 0 0;
-    transition: 1s;
+    transition: 0.7s;
     width: 180px;
 }
 
@@ -31,6 +31,6 @@ export default {
 .big-button:hover {
     color: white;
     background-color: rgba(76, 185, 117, 0.7);
-    transition: 1s;
+    transition: 0.7s;
 }
 </style>

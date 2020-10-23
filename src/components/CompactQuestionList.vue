@@ -23,7 +23,6 @@ import CompactQuestionItem from '@/components/CompactQuestionItem.vue'
 
 export default {
     name: 'compact-question-list',
-
     props: ['questions', 'includedQuestions'],
 
     methods: {
@@ -53,13 +52,12 @@ export default {
     max-height: 600px;
     overflow-x: auto;
     overflow-y: hidden;
+    overflow-y: auto;
 }
 
 .detail-text {
     display: none;
 }
-
-.item:hover {}
 
 .question-list {
     width: 48%;

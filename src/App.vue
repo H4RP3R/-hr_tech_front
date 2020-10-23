@@ -116,5 +116,7 @@ export default {
 
 .ck-editor__editable_inline {
     min-height: 200px;
+    padding: 0 0 0 20px !important;
 }
+
 </style>
