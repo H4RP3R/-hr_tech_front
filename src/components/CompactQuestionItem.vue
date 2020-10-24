@@ -38,6 +38,8 @@ export default {
     font-size: 10px;
     overflow-x: auto;
     overflow-y: auto;
+    text-align: left;
+    margin-left: 10px;
 }
 
 ::-webkit-scrollbar {

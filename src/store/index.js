@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
         questionToEdit: null,
         questionnaireToEdit: null,
         includedQuestions: [],
+        startQuestionnaireId: null,
     },
     getters: {
         USER_DATA: state => {
@@ -23,6 +24,9 @@ export const store = new Vuex.Store({
         },
         INCLUDED_QUESTIONS: state => {
             return state.includedQuestions
+        },
+        START_QUESTIONNAIRE_ID: state => {
+            return state.startQuestionnaireId
         }
     },
     mutations: {
@@ -43,6 +47,9 @@ export const store = new Vuex.Store({
         },
         SET_INCLUDED_QUESTIONS: (state, payload) => {
             state.includedQuestions = payload
+        },
+        SET_START_QUESTIONNAIRE_ID: (state, payload) => {
+            state.startQuestionnaireId = payload
         }
     },
 })

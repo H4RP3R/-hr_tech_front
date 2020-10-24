@@ -6,6 +6,7 @@
     </div>
     <question-form v-on:closeForm="turOffBlur" />
     <questionnaire-form  v-on:closeForm="turOffBlur" />
+    <q-action v-on:closeForm="turOffBlur" />
 </div>
 </template>
 
@@ -13,6 +14,7 @@
 import NavBar from '@/components/NavBar.vue'
 import QuestionForm from '@/components/QuestionForm.vue'
 import QuestionnaireForm from '@/components/QuestionnaireForm.vue'
+import QAction from '@/components/QAction.vue'
 import axios from 'axios'
 
 
@@ -32,6 +34,7 @@ export default {
         NavBar,
         QuestionForm,
         QuestionnaireForm,
+        QAction,
     },
 
     methods: {

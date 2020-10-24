@@ -49,7 +49,7 @@ export default {
     padding: 4px;
     margin-bottom: 9px;
     border: solid 1px rgba(0, 0, 0, 0.1);
-    max-height: 600px;
+    max-height: 60vh;
     overflow-x: auto;
     overflow-y: hidden;
     overflow-y: auto;
