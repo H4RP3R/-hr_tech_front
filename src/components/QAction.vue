@@ -61,7 +61,6 @@
         </div>
     </div>
     <big-button class="next-bttn" bttnText="Reply" :bttnFunction="handleReply" /><br>
-    {{ pollAnswers }}
 </div>
 </template>
 
@@ -82,10 +81,14 @@ export default {
             questionNum: 1,
             answers: [],
 
-            pollAnswers: {
-                'questionnaire_id': null,
+            pollResults: {
+                'questionnaire': null,
+                'user': null,
                 'answers': {
                     // question_id: [1, 2, ...]
+                },
+                'results': {
+                    // question_id, 'correct'/'wrong'
                 }
             },
 
@@ -112,12 +115,14 @@ export default {
             }
             document.querySelector('.empty-form-error ').style.display = 'none'
 
-            this.pollAnswers.answers[this.currentQuestionId] = this.currentQuestionFormAnswers
+            const isCorrect = this.checkAnswer()
 
+            this.pollResults.answers[this.currentQuestionId] = this.currentQuestionFormAnswers
+            this.pollResults.results[this.currentQuestionId] = isCorrect ? 'correct' : 'wrong'
 
             const questionStats = {
                 'question': this.currentQuestionId,
-                'correct': this.checkAnswer(),
+                'correct': isCorrect,
                 'var_1_repl': this.currentQuestionFormAnswers.includes(1) ? 1 : 0,
                 'var_2_repl': this.currentQuestionFormAnswers.includes(2) ? 1 : 0,
                 'var_3_repl': this.currentQuestionFormAnswers.includes(3) ? 1 : 0,
@@ -130,6 +135,8 @@ export default {
 
             if (this.questionNum < this.questions.length) {
                 this.next()
+            } else {
+                this.sendPollResults()
             }
         },
 
@@ -145,7 +152,8 @@ export default {
                 .then(response => {
                     this.title = response.data.title
                     this.questions = response.data.questions
-                    this.pollAnswers.questionnaire_id = ID
+                    this.pollResults.questionnaire = ID
+                    this.pollResults.user = this.$store.getters.USER_DATA.id
 
                     this.questions.forEach(item => {
                         item.correct_answers = item.correct_answers.split(',').map(
@@ -201,6 +209,23 @@ export default {
                 'headers': headers
             }).then(() => {
 
+            }).catch(err => {
+                console.error(err);
+            })
+        },
+
+        sendPollResults: function() {
+            const headers = {
+                Authorization: `Token ${this.$store.getters.USER_DATA.token}`
+            }
+
+            axios({
+                method: 'post',
+                url: `${BASE_URL}poll_results/`,
+                data: this.pollResults,
+                'headers': headers
+            }).then((response) => {
+                console.log(response);
             }).catch(err => {
                 console.error(err);
             })
