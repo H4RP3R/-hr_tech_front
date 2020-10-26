@@ -8,48 +8,60 @@
         <div class="question-frame">
             <div v-html="q.text" class="q-text"></div>
 
+            <div class="empty-form-error">
+                <span>[The answer cannot be empty.]</span>
+            </div>
+
             <div class="variants">
                 <div v-if="q.correct_answers.length > 1" class="variant">
                     <div class="variant">
-                        <input type="checkbox" id="variant1" name="variant1" :value="q.answer1">
+                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant1"
+                            name="variant1" value="1">
                         <label for="variant1">{{ q.answer1 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="checkbox" id="variant2" name="variant2" :value="q.answer2">
+                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant2"
+                            name="variant2" value="2">
                         <label for="variant2">{{ q.answer2 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="checkbox" id="variant3" name="variant3" :value="q.answer3">
+                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant3"
+                            name="variant3" value="3">
                         <label for="variant3">{{ q.answer3 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="checkbox" id="variant4" name="variant4" :value="q.answer4">
+                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant4"
+                            name="variant4" value="4">
                         <label for="variant4">{{ q.answer4 }}</label>
                     </div>
                 </div>
                 <div v-else class="variant">
                     <div class="variant">
-                        <input type="radio" id="variant1" name="variant" :value="q.answer1">
+                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant1"
+                            name="variant" value="1">
                         <label for="variant">{{ q.answer1 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="radio" id="variant2" name="variant" :value="q.answer2">
+                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant2"
+                            name="variant" value="2">
                         <label for="variant">{{ q.answer2 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="radio" id="variant3" name="variant" :value="q.answer3">
+                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant3"
+                            name="variant" value="3">
                         <label for="variant">{{ q.answer3 }}</label>
                     </div>
                     <div class="variant">
-                        <input type="radio" id="variant4" name="variant" :value="q.answer4">
+                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant4"
+                            name="variant" value="4">
                         <label for="variant">{{ q.answer4 }}</label>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <big-button class="next-bttn" bttnText="Reply" :bttnFunction="next" /><br>
-    <big-button class="done-bttn" bttnText="Done" :bttnFunction="close" /><br>
+    <big-button class="next-bttn" bttnText="Reply" :bttnFunction="handleReply" /><br>
+    {{ pollAnswers }}
 </div>
 </template>
 
@@ -58,7 +70,7 @@ import axios from 'axios'
 import BigButton from '@/components/BigButton.vue'
 import { bus } from '../main'
 
-const URL = 'http://127.0.0.1:8000/questionnaire/'
+const BASE_URL = 'http://127.0.0.1:8000/'
 
 export default {
     name: 'q-action',
@@ -69,6 +81,15 @@ export default {
             questions: [],
             questionNum: 1,
             answers: [],
+
+            pollAnswers: {
+                'questionnaire_id': null,
+                'answers': {
+                    // question_id: [1, 2, ...]
+                }
+            },
+
+            currentQuestionFormAnswers: [],
         }
     },
 
@@ -77,13 +98,39 @@ export default {
             document.querySelector('.q-wrapper').style.display = 'none'
             this.$emit('closeForm')
             this.$store.commit('SET_START_QUESTIONNAIRE_ID', null)
-            document.querySelector('.next-bttn').style.display = 'block'
-            document.querySelector('.done-bttn').style.display = 'none'
             this.questionNum = 1
         },
 
         next: function() {
             this.$emit('nextQuestion')
+        },
+
+        handleReply: function() {
+            if (this.currentQuestionFormAnswers.length == 0) {
+                document.querySelector('.empty-form-error ').style.display = 'block'
+                return
+            }
+            document.querySelector('.empty-form-error ').style.display = 'none'
+
+            this.pollAnswers.answers[this.currentQuestionId] = this.currentQuestionFormAnswers
+
+
+            const questionStats = {
+                'question': this.currentQuestionId,
+                'correct': this.checkAnswer(),
+                'var_1_repl': this.currentQuestionFormAnswers.includes(1) ? 1 : 0,
+                'var_2_repl': this.currentQuestionFormAnswers.includes(2) ? 1 : 0,
+                'var_3_repl': this.currentQuestionFormAnswers.includes(3) ? 1 : 0,
+                'var_4_repl': this.currentQuestionFormAnswers.includes(4) ? 1 : 0,
+            }
+
+            this.sendQuestionStats(questionStats)
+
+            this.currentQuestionFormAnswers = []
+
+            if (this.questionNum < this.questions.length) {
+                this.next()
+            }
         },
 
         getQuestionnaireById: function() {
@@ -94,10 +141,16 @@ export default {
             }
 
             const ID = this.$store.getters.START_QUESTIONNAIRE_ID
-            axios.get(URL + ID, config)
+            axios.get(BASE_URL + 'questionnaire/' + ID, config)
                 .then(response => {
                     this.title = response.data.title
                     this.questions = response.data.questions
+                    this.pollAnswers.questionnaire_id = ID
+
+                    this.questions.forEach(item => {
+                        item.correct_answers = item.correct_answers.split(',').map(
+                            x => { return +x })
+                    })
                 })
                 .catch(err => {
                     console.error(err)
@@ -107,18 +160,51 @@ export default {
         nextQuestion: function() {
             document.querySelector('.question-frame').remove()
             this.questionNum++
-            if (this.questionNum < this.questions.length) {
-                this.makeFirstFrameVisible()
-            } else {
-                document.querySelector('.next-bttn').style.display = 'none'
-                document.querySelector('.done-bttn').style.display = 'block'
-            }
+            this.makeFirstFrameVisible()
         },
 
         makeFirstFrameVisible: function() {
             const frame = document.querySelector('.question-frame')
             frame.style.display = 'block'
         },
+
+        checkAnswer: function() {
+            if (typeof this.currentQuestionFormAnswers == 'number') {
+                this.currentQuestionFormAnswers = [this.currentQuestionFormAnswers, ]
+            }
+
+            if (this.questions[this.questionNum - 1].correct_answers.length != this.currentQuestionFormAnswers
+                .length) {
+                return 0
+            }
+
+            let isCorrect
+            this.questions[this.questionNum - 1].correct_answers.forEach((item) => {
+                if (!this.currentQuestionFormAnswers.includes(item)) {
+                    isCorrect = 0
+                } else {
+                    isCorrect = 1
+                }
+            });
+            return isCorrect
+        },
+
+        sendQuestionStats(stats) {
+            const headers = {
+                Authorization: `Token ${this.$store.getters.USER_DATA.token}`
+            }
+
+            axios({
+                method: 'put',
+                url: `${BASE_URL}question_stats/${this.currentQuestionId}`,
+                data: stats,
+                'headers': headers
+            }).then(() => {
+
+            }).catch(err => {
+                console.error(err);
+            })
+        }
     },
 
     mounted() {
@@ -132,6 +218,12 @@ export default {
 
     components: {
         BigButton,
+    },
+
+    computed: {
+        currentQuestionId() {
+            return this.questions[this.questionNum - 1].id
+        }
     }
 }
 </script>
@@ -215,5 +307,16 @@ input[type=radio] {
 
 .done-bttn {
     display: none;
+}
+
+.empty-form-error {
+    display: none;
+    margin-top: 20px;
+    position: relative;
+    width: 100%;
+    color: red;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
 }
 </style>

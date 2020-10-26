@@ -110,7 +110,7 @@ export default {
 
             axios.get(BASE_URL + 'questions/', config)
                 .then(response => {
-                    if (!this.includedQuestions.length) {
+                    if (this.includedQuestions == 0) {
                         this.questions = response.data
                     } else {
                         let questions = response.data

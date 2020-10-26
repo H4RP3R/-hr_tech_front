@@ -27,7 +27,7 @@
                 <label for="answer3">Answer 3</label>
                 <input v-model="answer3" type="text" name="answer3" value="">
                 <label for="correct3">correct</label>
-                <input v-model="correctAnswers" type="checkbox" name="correc31" value="3"><br>
+                <input v-model="correctAnswers" type="checkbox" name="correct3" value="3"><br>
 
                 <label for="answer4">Answer 4</label>
                 <input v-model="answer4" type="text" name="answer4" value="">
