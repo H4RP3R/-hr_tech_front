@@ -30,7 +30,7 @@ import axios from 'axios'
 import UserPanel from '@/components/UserPanel.vue'
 import { bus } from '../main'
 
-const URL = 'http://localhost:8000/questionnaire/'
+const BASE_URL = 'http://localhost:8000/'
 
 export default {
     name: 'Main',
@@ -42,21 +42,29 @@ export default {
     },
 
     methods: {
-        getCookieValue: function(a) {
-            const b = document.cookie.match('(^|;)\\s*' + a + '\\s*=\\s*([^;]+)')
-            return b ? b.pop() : ''
-        },
-
         getQuestionnaires: function() {
+            if (this.$router.currentRoute.name == 'Login') {
+                return
+            }
+
             const config = {
                 headers: {
                     Authorization: `Token ${this.token = this.$cookies.get('token')}`
                 }
             }
 
-            axios.get(URL, config)
+            axios.get(BASE_URL + 'poll_results/', config)
                 .then(response => {
-                    this.questionnaires = response.data
+                    this.pollssResults = response.data
+                })
+                .catch(err => {
+                    console.error(err);
+                })
+
+            axios.get(BASE_URL + 'questionnaire/', config)
+                .then(response => {
+                    this.unfiltered = response.data
+                    this.hideCompleted()
                 })
                 .catch(err => {
                     console.error(err);
@@ -68,11 +76,44 @@ export default {
             document.querySelector('.q-wrapper').style.display = 'block'
             this.$store.commit('SET_START_QUESTIONNAIRE_ID', id)
             bus.$emit('clickOnQuestionnaire')
+        },
+
+        hideCompleted: function() {
+            const config = {
+                headers: {
+                    Authorization: `Token ${this.token = this.$cookies.get('token')}`
+                }
+            }
+
+            axios.get(BASE_URL + 'poll_results/', config)
+                .then(response => {
+                    this.pollssResults = response.data
+
+                    if (this.pollssResults.length == 0) {
+                        this.questionnaires = this.unfiltered
+                        return
+                    }
+
+                    this.unfiltered.forEach((i) => {
+                        this.pollssResults.forEach((j) => {
+                            if (i.id == j.questionnaire.id && this.$store.getters
+                                .USER_DATA.id == j.user.id) {
+                                this.unfiltered = this.unfiltered.filter(
+                                    item => item !== i)
+                            }
+                        });
+
+                    });
+                    this.questionnaires = this.unfiltered
+                })
+                .catch(err => {
+                    console.error(err);
+                })
         }
     },
 
     created() {
-        const token = this.getCookieValue('token')
+        const token = this.$cookies.get('token')
         if (!token) {
             this.$router.push({ name: 'Login' })
         }

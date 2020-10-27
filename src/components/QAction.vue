@@ -148,6 +148,7 @@ export default {
             }
 
             const ID = this.$store.getters.START_QUESTIONNAIRE_ID
+
             axios.get(BASE_URL + 'questionnaire/' + ID, config)
                 .then(response => {
                     this.title = response.data.title
@@ -205,6 +206,19 @@ export default {
             axios({
                 method: 'put',
                 url: `${BASE_URL}question_stats/${this.currentQuestionId}`,
+                data: stats,
+                'headers': headers
+            }).then(() => {
+
+            }).catch(err => {
+                console.error(err);
+            })
+
+            const ID = this.$store.getters.START_QUESTIONNAIRE_ID
+            stats.poll = ID
+            axios({
+                method: 'put',
+                url: `${BASE_URL}question_in_poll_stats/${this.currentQuestionId}`,
                 data: stats,
                 'headers': headers
             }).then(() => {

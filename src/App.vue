@@ -115,6 +115,7 @@ export default {
     margin-top: 10px;
     display: flex;
     flex-direction: row;
+    margin-top: 70px;
 }
 
 .ck-editor__editable_inline {

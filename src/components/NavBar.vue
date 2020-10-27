@@ -5,6 +5,9 @@
         <span v-if="userData.is_hr_staff">
             <router-link to="/admin">Admin</router-link>
         </span>
+        <span v-if="userData.is_hr_staff">
+            <router-link to="/admin-stats">Statistics</router-link>
+        </span>
         <span v-if="token">
             <a href="" v-on:click="logout">Logout</a>
         </span>
@@ -37,6 +40,9 @@ export default {
     font-size: 18px;
     padding: 18px 0;
     margin-bottom: 6px;
+    position: fixed;
+    top: 0;
+    background: rgba(255, 255, 255, 0.92);
 }
 
 nav {

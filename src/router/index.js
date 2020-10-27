@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
 import Login from '../views/Login.vue'
 import Admin from '../views/Admin.vue'
+import AdminStats from '../views/AdminStats.vue'
+
 
 Vue.use(VueRouter)
 
@@ -28,6 +30,11 @@ const routes = [{
         path: '/admin',
         name: 'Admin',
         component: Admin,
+    },
+    {
+        path: '/admin-stats',
+        name: 'AdminStats',
+        component: AdminStats,
     },
 ]
 
