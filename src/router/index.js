@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Main from '../views/Main.vue'
 import Login from '../views/Login.vue'
 import Admin from '../views/Admin.vue'
-import AdminStats from '../views/AdminStats.vue'
+import AdminStats from '../views/PollsStats.vue'
+import QuestionStats from '../views/QuestionsStats.vue'
 
 
 Vue.use(VueRouter)
@@ -32,9 +33,14 @@ const routes = [{
         component: Admin,
     },
     {
-        path: '/admin-stats',
+        path: '/polls-stats',
         name: 'AdminStats',
         component: AdminStats,
+    },
+    {
+        path: '/questions-stats',
+        name: 'QuestionsStats',
+        component: QuestionStats,
     },
 ]
 

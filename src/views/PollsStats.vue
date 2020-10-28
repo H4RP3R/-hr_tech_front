@@ -17,7 +17,7 @@ import PollChart from '@/components/PollChart.vue'
 const URL = 'http://localhost:8000/question_in_poll_stats/'
 
 export default {
-    name: 'admin-stats',
+    name: 'polls-stats',
 
     data() {
         return {

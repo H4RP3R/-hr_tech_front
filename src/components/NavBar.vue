@@ -6,7 +6,8 @@
             <router-link to="/admin">Admin</router-link>
         </span>
         <span v-if="userData.is_hr_staff">
-            <router-link to="/admin-stats">Statistics</router-link>
+            <router-link to="/polls-stats">Polls Stats</router-link>
+            <router-link to="/questions-stats">Questions Stats</router-link>
         </span>
         <span v-if="token">
             <a href="" v-on:click="logout">Logout</a>
@@ -55,7 +56,7 @@ nav {
 a {
     color: rgba(85, 76, 185, 0.9);
     text-decoration: none;
-    margin: 0 6px;
+    margin: 0 12px;
 }
 
 a:hover {
