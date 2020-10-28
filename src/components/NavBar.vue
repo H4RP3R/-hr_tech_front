@@ -6,8 +6,9 @@
             <router-link to="/admin">Admin</router-link>
         </span>
         <span v-if="userData.is_hr_staff">
-            <router-link to="/polls-stats">Polls Stats</router-link>
-            <router-link to="/questions-stats">Questions Stats</router-link>
+            <router-link to="/poll-stats">Poll Stats</router-link>
+            <router-link to="/question-stats">Question Stats</router-link>
+            <router-link to="/user-stats">User Stats</router-link>
         </span>
         <span v-if="token">
             <a href="" v-on:click="logout">Logout</a>
@@ -44,6 +45,7 @@ export default {
     position: fixed;
     top: 0;
     background: rgba(255, 255, 255, 0.92);
+    z-index: 5;
 }
 
 nav {

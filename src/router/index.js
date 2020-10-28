@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import Admin from '../views/Admin.vue'
 import AdminStats from '../views/PollsStats.vue'
 import QuestionStats from '../views/QuestionsStats.vue'
+import UserStats from '../views/UserStats.vue'
 
 
 Vue.use(VueRouter)
@@ -33,14 +34,19 @@ const routes = [{
         component: Admin,
     },
     {
-        path: '/polls-stats',
+        path: '/poll-stats',
         name: 'AdminStats',
         component: AdminStats,
     },
     {
-        path: '/questions-stats',
+        path: '/question-stats',
         name: 'QuestionsStats',
         component: QuestionStats,
+    },
+    {
+        path: '/user-stats',
+        name: 'UserStats',
+        component: UserStats,
     },
 ]
 
