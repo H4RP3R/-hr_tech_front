@@ -4,7 +4,7 @@
         <form class="login-form" method="post">
             <p v-if="errors.length">
                 <b>Please correct the following error(s):</b>
-                <ul>
+                <ul class="error">
                     <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
                 </ul>
             </p>
@@ -15,7 +15,9 @@
             <label for="password">Password</label>
             <input v-model="password" type="password" name="password" id="password" value=""><br>
 
-            <input type="submit" name="" value="Sign in">
+            <div class="">
+                <input type="submit" name="" value="Sign in">
+            </div>
         </form>
     </div>
 </div>
@@ -78,5 +80,44 @@ export default {
 <style scoped>
 .login {
     margin: auto;
+    margin-top: 20px;
+}
+
+.login label {
+    text-transform: uppercase;
+    font-size: 14px;
+    margin: 4px;
+}
+
+input[type=text],
+input[type=password] {
+    outline: none;
+    border: solid 1px rgb(31, 137, 229);
+    font-size: 18px;
+    padding: 4px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=submit] {
+    border: solid 1px rgb(85, 76, 185);
+    padding: 0 2px;
+    background-color: white;
+    transition: 1s;
+    padding: 4px 12px;
+    font-size: 16px;
+}
+
+input[type=submit]:hover {
+    color: white;
+    background-color: rgb(85, 76, 185);
+    transition: 1s;
+}
+
+.error {
+    color: red;
 }
 </style>
