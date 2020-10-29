@@ -1,5 +1,8 @@
 <template>
 <div class="wrapper">
+    <div v-if="Object.keys(totalPollStats).length === 0" class="no-data">
+        <span>no data</span>
+    </div>
     <div class="poll-wrapper">
         <div v-for="stat in totalPollStats" :key="stat.id">
             <h1>{{ stat[0].poll.title }}</h1>

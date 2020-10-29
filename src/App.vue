@@ -123,4 +123,9 @@ export default {
     padding: 0 0 0 20px !important;
 }
 
+.no-data {
+    font-size: 24px;
+    margin: auto;
+}
+
 </style>

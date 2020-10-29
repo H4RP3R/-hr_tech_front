@@ -84,6 +84,7 @@ export default {
             pollResults: {
                 'questionnaire': null,
                 'user': null,
+                'score': 0,
                 'answers': {
                     // question_id: [1, 2, ...]
                 },
@@ -137,6 +138,8 @@ export default {
                 this.next()
             } else {
                 this.sendPollResults()
+                this.close()
+                bus.$emit('questionnaireUpdate')
             }
         },
 
@@ -193,6 +196,7 @@ export default {
                     isCorrect = 0
                 } else {
                     isCorrect = 1
+                    this.pollResults.score += this.questions[this.questionNum - 1].score
                 }
             });
             return isCorrect
@@ -237,9 +241,9 @@ export default {
                 method: 'post',
                 url: `${BASE_URL}poll_results/`,
                 data: this.pollResults,
-                'headers': headers
-            }).then((response) => {
-                console.log(response);
+                'headers': headers,
+            }).then(() => {
+                
             }).catch(err => {
                 console.error(err);
             })
@@ -335,7 +339,7 @@ label {
 input[type=checkbox],
 input[type=radio] {
     margin-right: 10px;
-    transform: scale(1.2)
+    transform: scale(1.8)
 }
 
 .next-bttn,

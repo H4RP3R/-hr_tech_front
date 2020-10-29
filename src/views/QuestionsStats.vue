@@ -1,10 +1,13 @@
 <template>
-    <div class="wrapper">
-        <div v-for="stat in questionsStats" :key="stat.id" class="q-bar-item">
-            <span v-html="stat.question.text" class="question-text"></span>
-            <question-bar :chartData="stat" />
-        </div>
+<div class="wrapper">
+    <div v-if="questionsStats.length === 0" class="no-data">
+        <span>no data</span>
     </div>
+    <div v-for="stat in questionsStats" :key="stat.id" class="q-bar-item">
+        <span v-html="stat.question.text" class="question-text"></span>
+        <question-bar :chartData="stat" />
+    </div>
+</div>
 </template>
 
 <script>
@@ -44,6 +47,11 @@ export default {
     },
 
     created() {
+        const token = this.$cookies.get('token')
+        if (!token) {
+            this.$router.push({ name: 'Login' })
+        }
+
         this.getQuestionsStats()
     },
 
@@ -58,7 +66,7 @@ export default {
 <style scoped>
 .wrapper {
     display: flex;
-    flex-grow:3;
+    flex-grow: 3;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-end;

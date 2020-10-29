@@ -59,7 +59,7 @@ export default {
                     Authorization: `Token ${this.$cookies.get('token')}`
                 }
             }
-            
+
             axios.get(BASE_URL + `poll_results_for_user/${id}`, config)
                 .then(response => {
                     this.statsForUser = response.data

@@ -1,5 +1,8 @@
 <template>
 <div class="right-panel">
+    <div v-if="stats.length === 0" class="no-data">
+        <span>no data</span>
+    </div>
     <div v-for="stat in stats" :key=stat.id class="">
         <h2>{{ stat.questionnaire.title }}</h2>
         <div v-for="q in stat.questionnaire.questions" :key="q.id" class="question-item">
@@ -7,9 +10,11 @@
 
             <div class="variants">
                 <variants-billet :vars="q" :correctAnsNum="q.correct_answers" :userAnswers="stat.answers[q.id]" />
-                {{ stat.user.username }}
             </div>
-            <hr>
+
+        </div>
+        <div class="user-score box-shadow">
+            <p><b>{{ stat.user.username }}</b>'s score: {{ stat.score }}</p>
         </div>
     </div>
 </div>
@@ -51,5 +56,11 @@ hr {
     border: solid 1px rgba(0, 0, 0, 0.2);
     padding: 14px;
     margin: 4px;
+}
+
+.user-score {
+    font-size: 22px;
+    margin: 12px;
+    padding: 20px;
 }
 </style>
