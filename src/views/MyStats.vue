@@ -78,7 +78,7 @@ export default {
                 })
             })
             const res = ((correct * 100) / (correct + wrong))
-            this.totalStats.correctAnswersPercent =  Number.parseFloat(res).toPrecision(3);
+            this.totalStats.correctAnswersPercent =  Number.parseFloat(res).toFixed(1);
         }
     },
 

@@ -9,12 +9,17 @@
             <span v-html="q.text" class="question-text"></span>
 
             <div class="variants">
-                <variants-billet :vars="q" :correctAnsNum="q.correct_answers" :userAnswers="stat.answers[q.id]" />
+                <variants-billet :question="q" :correctAnsNum="q.correct_answers" :userAnswers="stat.answers[q.id]" />
             </div>
 
         </div>
         <div class="user-score box-shadow">
-            <p><b>{{ stat.user.username }}</b>'s score: {{ stat.score }}</p>
+            <span v-if="stat.user.username== $store.getters.USER_DATA.username">
+                <p><b>Your</b> score: {{ stat.score }}</p>
+            </span>
+            <span v-else>
+                <p><b>{{ stat.user.username }}</b>'s score: {{ stat.score }}</p>
+            </span>
         </div>
     </div>
 </div>

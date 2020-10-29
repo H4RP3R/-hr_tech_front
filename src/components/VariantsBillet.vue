@@ -1,25 +1,42 @@
 <template>
-<div class="variants" ref="var">
-    <div class="var">
-        <span>1. {{ vars.answer1 }}</span>
+<div>
+    <div class="variants" ref="var">
+        <div class="var">
+            <span>1. {{ question.answer1 }}</span>
+        </div>
+        <div class="var">
+            <span>2. {{ question.answer2 }}</span>
+        </div>
+        <div class="var">
+            <span>3. {{ question.answer3 }}</span>
+        </div>
+        <div class="var">
+            <span>4. {{ question.answer4 }}</span>
+        </div>
     </div>
-    <div class="var">
-        <span>2. {{ vars.answer2 }}</span>
-    </div>
-    <div class="var">
-        <span>3. {{ vars.answer3 }}</span>
-    </div>
-    <div class="var">
-        <span>4. {{ vars.answer4 }}</span>
+    <div class="the-same">
+        <span class="percent">{{ this.sameAnswerPercent }} %</span>
+        <span> of users have chosen the same variant.</span>
     </div>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+const URL = 'http://localhost:8000/question_stats/'
+
 export default {
     name: 'variants-billet',
 
-    props: ['vars', 'correctAnsNum', 'userAnswers'],
+    props: ['question', 'correctAnsNum', 'userAnswers'],
+
+    data() {
+        return {
+            crowdStats: {},
+            sameAnswerPercent: 0,
+        }
+    },
 
     methods: {
         markSelected: function() {
@@ -41,11 +58,37 @@ export default {
                     variants[i - 1].classList.add('wrong')
                 }
             })
+        },
+
+        getQestionStats: function() {
+            const config = {
+                headers: {
+                    Authorization: `Token ${this.$cookies.get('token')}`
+                }
+            }
+
+            axios.get(URL + this.question.id, config)
+                .then(response => {
+                    this.crowdStats = response.data
+                    this.calcPercentage()
+                }).catch(err => {
+                    console.error(err);
+                })
+        },
+
+        calcPercentage: function() {
+            let n = 0
+            this.userAnswers.forEach(item => {
+                n += this.crowdStats[`var_${item}_repl`]
+            })
+            const res = (n * 100 / this.crowdStats.total_replies)
+            this.sameAnswerPercent = Number.parseFloat(res).toFixed(1)
         }
     },
 
     mounted() {
         this.$nextTick(this.markSelected)
+        this.getQestionStats()
     },
 }
 </script>
@@ -83,5 +126,13 @@ export default {
     color: red;
     margin-left: 5px;
     font-size: 20px;
+}
+
+.the-same {
+    font-style: italic;
+}
+
+.percent {
+    font-weight: bold;
 }
 </style>
