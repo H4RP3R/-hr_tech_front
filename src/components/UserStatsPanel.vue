@@ -3,9 +3,9 @@
     <div v-if="stats.length === 0" class="no-data">
         <span>no data</span>
     </div>
-    <div v-for="stat in stats" :key=stat.id class="">
+    <div v-for="stat in stats" :key="stat.id">
         <h2>{{ stat.questionnaire.title }}</h2>
-        <div v-for="q in stat.questionnaire.questions" :key="q.id" class="question-item">
+        <div v-for="q in stat.questionnaire.questions" :key="q.id" class="question-item box-shadow">
             <span v-html="q.text" class="question-text"></span>
 
             <div class="variants">
@@ -55,7 +55,7 @@ hr {
 .question-item {
     border: solid 1px rgba(0, 0, 0, 0.2);
     padding: 14px;
-    margin: 4px;
+    margin: 8px 4px;
 }
 
 .user-score {

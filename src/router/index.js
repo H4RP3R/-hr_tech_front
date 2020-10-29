@@ -6,6 +6,7 @@ import Admin from '../views/Admin.vue'
 import AdminStats from '../views/PollsStats.vue'
 import QuestionStats from '../views/QuestionsStats.vue'
 import UserStats from '../views/UserStats.vue'
+import MyStats from '../views/MyStats.vue'
 
 
 Vue.use(VueRouter)
@@ -47,6 +48,11 @@ const routes = [{
         path: '/user-stats',
         name: 'UserStats',
         component: UserStats,
+    },
+    {
+        path: '/my-stats',
+        name: 'MyStats',
+        component: MyStats,
     },
 ]
 

@@ -32,6 +32,7 @@ export const store = new Vuex.Store({
     mutations: {
         SET_USER_DATA: (state, payload) => {
             state.userData = payload
+            bus.$emit('haveUserData')
         },
         SET_CURRENT_QUESTION_ID: (state, payload) => {
             state.questionToEdit = payload

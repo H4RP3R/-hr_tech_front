@@ -10,6 +10,9 @@
             <router-link to="/question-stats">Question Stats</router-link>
             <router-link to="/user-stats">User Stats</router-link>
         </span>
+        <span v-else>
+            <router-link to="/my-stats">My Statistics</router-link>
+        </span>
         <span v-if="token">
             <a href="" v-on:click="logout">Logout</a>
         </span>
