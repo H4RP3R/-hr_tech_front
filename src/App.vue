@@ -128,4 +128,10 @@ export default {
     margin: auto;
 }
 
+.image {
+    display: block;
+    max-height: 180px;
+    width: auto;
+    margin: auto;
+}
 </style>

@@ -10,6 +10,20 @@
     <form class="" @submit="sendForm" action="" method="post">
         <ckeditor :editor="editor" v-model="text" :config="editorConfig"></ckeditor>
 
+        <div class="image-field">
+
+            <input @change="handleFileUpload()" ref="file" type="file" name="img" accept="image/*"
+                class="inputfile">
+            <label for="file">
+                <span v-if="image">
+                    {{ image.name }}
+                </span>
+                <span v-else>
+                    Choose a file
+                </span>
+            </label>
+        </div>
+
         <div class="answers">
             <div class="answer-group">
                 <label for="answer1">Answer 1</label>
@@ -71,6 +85,7 @@ export default {
             hasCorrectAnswer: false,
             correctAnswers: [],
             score: 0,
+            image: null,
 
             editor: ClassicEditor,
             editorData: '<p>Content of the editor.</p>',
@@ -90,6 +105,7 @@ export default {
             this.hasCorrectAnswer = false
             this.correctAnswers = []
             this.score = 0
+            this.image = null
             document.querySelector('.qestion-form').style.display = 'none'
             this.$emit('closeForm')
             this.$store.commit('SET_CURRENT_QUESTION_ID', null)
@@ -103,25 +119,36 @@ export default {
             }
 
             let correctAnswers = []
-            if (this.correctAnswers.length){
+            if (this.correctAnswers.length) {
                 correctAnswers = this.correctAnswers.map(x => +x)
             }
             const method = this.questionId ? 'put' : 'post'
             const URL = this.questionId ? BASE_URL + this.questionId : BASE_URL
 
+            const formData = new FormData()
+            formData.append('image', this.image)
+
+            const data = {
+                'text': this.text,
+                'answer1': this.answer1,
+                'answer2': this.answer2,
+                'answer3': this.answer3,
+                'answer4': this.answer4,
+                'has_correct_answer': this.hasCorrectAnswer,
+                'correct_answers': correctAnswers.join(),
+                'score': +this.score,
+                'image': this.image
+            }
+
+            for (let key in data) {
+                formData.append(key, data[key])
+            }
+
+
             axios({
                 method: method,
                 url: URL,
-                data: {
-                    'text': this.text,
-                    'answer1': this.answer1,
-                    'answer2': this.answer2,
-                    'answer3': this.answer3,
-                    'answer4': this.answer4,
-                    'has_correct_answer': this.hasCorrectAnswer,
-                    'correct_answers': correctAnswers.join(),
-                    'score': +this.score,
-                },
+                data: formData,
                 'headers': headers
             }).then(() => {
                 this.closeForm()
@@ -152,6 +179,10 @@ export default {
                 .catch(err => {
                     console.error(err)
                 })
+        },
+
+        handleFileUpload() {
+            this.image = this.$refs.file.files[0]
         }
     },
 
@@ -199,6 +230,40 @@ h2 {
 
 .close:focus {
     outline: none;
+}
+
+.image-field {
+    margin-top: 12px;
+    border: solid 1px rgba(0, 0, 0, 0.1);
+}
+
+.inputfile {
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 160px;
+    margin: 4px;
+    padding: 5px;
+}
+
+.inputfile+label::before {
+    content: "📌";
+    margin-right: 4px;
+}
+
+.inputfile+label {
+    margin: 8px;
+    padding: 4px;
+    border: solid 1px rgba(85, 76, 185, 0.9);
+    display: inline-block;
+    width: 160px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inputfile+label {
+    cursor: pointer;
 }
 
 .answers,

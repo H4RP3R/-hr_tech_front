@@ -86,7 +86,7 @@ export default {
 .login label {
     text-transform: uppercase;
     font-size: 14px;
-    margin: 4px;
+    margin: 3px;
 }
 
 input[type=text],

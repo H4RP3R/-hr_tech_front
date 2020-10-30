@@ -8,6 +8,9 @@
         <div class="question-frame">
             <div v-html="q.text" class="q-text"></div>
 
+            <img :src="imageUrl(q.image)" class="image" height="400px">
+
+
             <div class="empty-form-error">
                 <span>[The answer cannot be empty.]</span>
             </div>
@@ -69,7 +72,7 @@ import axios from 'axios'
 import BigButton from '@/components/BigButton.vue'
 import { bus } from '../main'
 
-const BASE_URL = 'http://127.0.0.1:8000/'
+const BASE_URL = 'http://127.0.0.1:8000'
 
 export default {
     name: 'q-action',
@@ -152,7 +155,7 @@ export default {
 
             const ID = this.$store.getters.START_QUESTIONNAIRE_ID
 
-            axios.get(BASE_URL + 'questionnaire/' + ID, config)
+            axios.get(BASE_URL + '/questionnaire/' + ID, config)
                 .then(response => {
                     this.title = response.data.title
                     this.questions = response.data.questions
@@ -209,7 +212,7 @@ export default {
 
             axios({
                 method: 'put',
-                url: `${BASE_URL}question_stats/${this.currentQuestionId}`,
+                url: `${BASE_URL}/question_stats/${this.currentQuestionId}`,
                 data: stats,
                 'headers': headers
             }).then(() => {
@@ -222,7 +225,7 @@ export default {
             stats.poll = ID
             axios({
                 method: 'put',
-                url: `${BASE_URL}question_in_poll_stats/${this.currentQuestionId}`,
+                url: `${BASE_URL}/question_in_poll_stats/${this.currentQuestionId}`,
                 data: stats,
                 'headers': headers
             }).then(() => {
@@ -239,14 +242,18 @@ export default {
 
             axios({
                 method: 'post',
-                url: `${BASE_URL}poll_results/`,
+                url: `${BASE_URL}/poll_results/`,
                 data: this.pollResults,
                 'headers': headers,
             }).then(() => {
-                
+
             }).catch(err => {
                 console.error(err);
             })
+        },
+
+        imageUrl: function(img) {
+            return BASE_URL + img
         }
     },
 
@@ -266,7 +273,7 @@ export default {
     computed: {
         currentQuestionId() {
             return this.questions[this.questionNum - 1].id
-        }
+        },
     }
 }
 </script>

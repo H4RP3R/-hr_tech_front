@@ -6,6 +6,7 @@
         <b>id:</b> {{ question.id }}
     </div>
     <div class="inner-html" v-html="question.text"></div>
+    <img :src="question.image" class="image">
 </div>
 </template>
 
