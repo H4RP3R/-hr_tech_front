@@ -8,7 +8,7 @@
         <div class="question-frame">
             <div v-html="q.text" class="q-text"></div>
 
-            <img :src="imageUrl(q.image)" class="image" height="400px">
+            <img :src="q.image" class="image" height="400px">
 
 
             <div class="empty-form-error">
@@ -251,10 +251,6 @@ export default {
                 console.error(err);
             })
         },
-
-        imageUrl: function(img) {
-            return BASE_URL + img
-        }
     },
 
     mounted() {

@@ -40,7 +40,6 @@ export default {
 
     methods: {
         markSelected: function() {
-            // console.log(this.userAnswers);
             const variants = this.$refs.var.getElementsByClassName('var')
 
             if (this.userAnswers === undefined) {
