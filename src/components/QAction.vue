@@ -8,8 +8,7 @@
         <div class="question-frame">
             <div v-html="q.text" class="q-text"></div>
 
-            <img :src="q.image" class="image" height="400px">
-
+            <img :src="imageUrl(q.image)" class="image" height="400px">
 
             <div class="empty-form-error">
                 <span>[The answer cannot be empty.]</span>
@@ -251,6 +250,10 @@ export default {
                 console.error(err);
             })
         },
+
+        imageUrl: function(img) {
+            return BASE_URL + img
+        }
     },
 
     mounted() {
