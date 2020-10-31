@@ -61,7 +61,7 @@ export default {
                     console.error(err);
                 })
 
-            axios.get(BASE_URL + 'questionnaire/', config)
+            axios.get(BASE_URL + 'published_questionnaire/', config)
                 .then(response => {
                     this.unfiltered = response.data
                     this.hideCompleted()

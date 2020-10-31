@@ -8,9 +8,22 @@
         <h2>New Questionnaire</h2>
     </div>
     <form @submit="sendForm" action="" method="post">
-        <label for="title">Title</label>
-        <input v-model="title" type="text" name="title" id="title" value="">
-        <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
+        <div class="fields">
+
+            <div class="field">
+                <label for="title">Title</label>
+                <input v-model="title" type="text" name="title" id="title" value="">
+            </div>
+
+            <div class="field">
+                <label for="pub-time">When to publish</label>
+                <input v-model="pubDate" type="datetime-local" name="pub-time" :min="minTime">
+            </div>
+
+            <div class="field">
+                <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
+            </div>
+        </div>
 
         <div class="headers">
             <h3>All questions</h3>
@@ -38,6 +51,7 @@ export default {
             title: '',
             questions: [],
             includedQuestions: [],
+            pubDate: null,
         }
     },
 
@@ -65,12 +79,14 @@ export default {
                 url: URL,
                 data: {
                     'title': this.title,
-                    'questions': this.$store.getters.INCLUDED_QUESTIONS.map(q => q.id)
+                    'questions': this.$store.getters.INCLUDED_QUESTIONS.map(q => q.id),
+                    'pub_date': new Date(new Date(this.pubDate).toUTCString())
                 },
                 'headers': headers
             }).then(() => {
                 this.title = ''
-                bus.$emit('questionnaireUpdate')
+                this.pubDate = null,
+                    bus.$emit('questionnaireUpdate')
                 this.closeForm()
             }).catch(err => {
                 console.error(err)
@@ -88,6 +104,15 @@ export default {
                 .then(response => {
                     this.title = response.data.title
                     this.includedQuestions = response.data.questions
+                    this.$store.commit('SET_INCLUDED_QUESTIONS', response.data.questions)
+
+                    const d = new Date(response.data.pub_date)
+                    const year = d.getFullYear()
+                    const month = ('0' + (d.getMonth() + 1)).slice(-2)
+                    const date = ('0' + (d.getDate())).slice(-2)
+                    const hour = ('0' + (d.getHours())).slice(-2)
+                    const min = ('0' + (d.getMinutes())).slice(-2)
+                    this.pubDate = `${year}-${month}-${date}T${hour}:${min}`
                     this.getQuestions()
                 })
                 .catch(err => {
@@ -135,6 +160,10 @@ export default {
         },
         bttnText() {
             return (this.questionnaireId ? 'Update' : 'Create')
+        },
+        minTime() {
+            const d = new Date()
+            return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}T${d.getHours()}:${d.getMinutes()}`
         },
     },
 
@@ -197,12 +226,19 @@ label {
     margin: 0 4px 0 16px;
 }
 
-input[type=text] {
+input[type=text],
+input[type=datetime-local] {
     margin-top: 8px;
     border: solid 1px rgba(0, 0, 0, 0.3);
+    padding: 4px;
 }
 
-input[type=text]:focus {
+input[type=datetime-local] {
+    padding: 2px;
+}
+
+input[type=text]:focus,
+input[type=datetime-local]:focus {
     outline: none;
     border: solid 1px rgb(31, 137, 229);
 }
@@ -213,6 +249,9 @@ input[type=submit] {
     padding: 0 2px;
     background-color: white;
     transition: 1s;
+    padding: 4px 0;
+    width: 120px;
+    align-self: center;
 }
 
 input[type=submit]:hover {
@@ -224,5 +263,18 @@ input[type=submit]:hover {
 
 input[type=submit]:focus {
     outline: none;
+}
+
+.fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    margin: 4px 0;
 }
 </style>

@@ -9,6 +9,9 @@
         <span>title: </span>{{ questionnaire.title }}
     </div>
     <div>
+        <span>publication date: </span> {{ pubDate }}
+    </div>
+    <div>
         <span>contains {{ questionnaire.questions.length }} </span>
         <span v-if="questionsNum == 1">
             question
@@ -33,6 +36,17 @@ export default {
                 }
             })
             return n
+        },
+
+        pubDate: function() {
+            const d = new Date(this.questionnaire.pub_date)
+                    const year = d.getFullYear()
+                    const month = ('0' + (d.getMonth() + 1)).slice(-2)
+                    const date = ('0' + (d.getDate())).slice(-2)
+                    const hour = ('0' + (d.getHours())).slice(-2)
+                    const min = ('0' + (d.getMinutes() )).slice(-2)
+
+            return `${year}.${month}.${date} ${hour}:${min}`
         }
     }
 }
