@@ -17,7 +17,7 @@
 import axios from 'axios'
 import UserStatsPanel from '@/components/UserStatsPanel.vue'
 
-const BASE_URL = 'http://0.0.0.0:8000/'
+const BASE_URL = 'http://localhost:8000/'
 
 export default {
     name: 'UserStats',
