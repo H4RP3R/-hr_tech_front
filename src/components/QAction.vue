@@ -73,7 +73,7 @@ import axios from 'axios'
 import BigButton from '@/components/BigButton.vue'
 import { bus } from '../main'
 
-const BASE_URL = 'http://127.0.0.1:8000'
+const BASE_URL = 'http://0.0.0.0:8000'
 
 export default {
     name: 'q-action',

@@ -15,11 +15,8 @@
 </template>
 
 <script>
-// import axios from 'axios'
 import draggable from 'vuedraggable'
 import CompactQuestionItem from '@/components/CompactQuestionItem.vue'
-
-// const URL = 'http://127.0.0.1:8000/questions/'
 
 export default {
     name: 'compact-question-list',

@@ -72,7 +72,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 import { bus } from '../main'
 
 
-const BASE_URL = 'http://127.0.0.1:8000/questions/'
+const BASE_URL = 'http://0.0.0.0:8000/questions/'
 
 
 export default {

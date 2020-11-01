@@ -14,7 +14,7 @@
 import axios from 'axios'
 import QuestionBar from '@/components/QuestionBar.vue'
 
-const URL = 'http://127.0.0.1:8000/question_stats/'
+const URL = 'http://0.0.0.0:8000/question_stats/'
 
 export default {
     name: 'question-stats',

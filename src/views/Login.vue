@@ -27,7 +27,7 @@
 import axios from 'axios'
 
 
-const URL = 'http://127.0.0.1:8000/api-token-auth/'
+const URL = 'http://0.0.0.0:8000/api-token-auth/'
 
 export default {
     name: 'Login',
