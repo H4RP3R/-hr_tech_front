@@ -77,6 +77,9 @@ export default {
 
         calcPercentage: function() {
             let n = 0
+            if (!this.userAnswers) {
+                return
+            }
             this.userAnswers.forEach(item => {
                 n += this.crowdStats[`var_${item}_repl`]
             })

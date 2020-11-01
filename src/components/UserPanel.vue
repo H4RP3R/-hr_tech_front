@@ -1,6 +1,8 @@
 <template>
 <div class="panel">
-    <h2>Hi, {{ userData.username }}</h2>
+    <div v-if="userData">
+        <h2>Hi, {{ userData.username }}</h2>
+    </div>
 </div>
 </template>
 

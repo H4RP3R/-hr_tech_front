@@ -83,7 +83,7 @@ export default {
                 data: {
                     'title': this.title,
                     'questions': this.$store.getters.INCLUDED_QUESTIONS.map(q => q.id),
-                    'pub_date': new Date(new Date(this.pubDate).toUTCString())
+                    'pub_date': new Date(new Date(this.pubDate).toString())
                 },
                 'headers': headers
             }).then(() => {

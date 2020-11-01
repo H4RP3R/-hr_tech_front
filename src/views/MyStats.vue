@@ -78,7 +78,9 @@ export default {
                 })
             })
             const res = ((correct * 100) / (correct + wrong))
-            this.totalStats.correctAnswersPercent =  Number.parseFloat(res).toFixed(1);
+            if (!isNaN(res)) {
+                this.totalStats.correctAnswersPercent = Number.parseFloat(res).toFixed(1)
+            }
         }
     },
 

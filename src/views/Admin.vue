@@ -14,6 +14,7 @@ import LeftPanel from '@/components/LeftPanel.vue'
 import QuestionList from '@/components/QuestionList.vue'
 import QuestionnaireList from '@/components/QuestionnaireList.vue'
 import TabsBlock from '@/components/TabsBlock.vue'
+import { bus } from '../main'
 
 export default {
     name: 'Main',
@@ -45,6 +46,10 @@ export default {
             this.$router.push({ name: 'Login' })
             this.$store.commit('SET_USER_DATA', null)
         }
+    },
+
+    mounted() {
+        bus.$emit('questionsUpdate')
     }
 
 }
