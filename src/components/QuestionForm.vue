@@ -58,7 +58,9 @@
             <input v-model="score" type="number" name="score" min="0"><br>
 
             <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
-            <button @click="deleteQuestion" type="button" class="delete-bttn" name="delete">Delete</button>
+            <span v-if="bttnText=='Update'">
+                <button @click="deleteQuestion" type="button" class="delete-bttn" name="delete">Delete</button>
+            </span>
         </div>
     </form>
 </div>

@@ -8,7 +8,9 @@
         <div class="question-frame">
             <div v-html="q.text" class="q-text"></div>
 
-            <img :src="imageUrl(q.image)" class="image" height="400px">
+            <span v-if="q.image">
+                <img :src="imageUrl(q.image)" class="image" height="400px">
+            </span>
 
             <div class="empty-form-error">
                 <span>[The answer cannot be empty.]</span>

@@ -20,8 +20,11 @@
                 <input v-model="pubDate" type="datetime-local" name="pub-time" :min="minTime">
             </div>
 
-            <div class="field">
+            <div class="bttn-field">
                 <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
+                <span v-if="bttnText=='Update'">
+                    <button @click="deleteQuestionnaire" type="button" class="delete-bttn" name="delete">Delete</button>
+                </span>
             </div>
         </div>
 
@@ -152,6 +155,24 @@ export default {
                     console.error(err);
                 })
         },
+
+        deleteQuestionnaire() {
+            const headers = {
+                Authorization: `Token ${this.token = this.$cookies.get('token')}`
+            }
+
+            axios({
+                method: 'delete',
+                url: BASE_URL + 'questionnaire/' + this.questionnaireId,
+                'headers': headers
+            }).then(() => {
+                this.closeForm()
+                bus.$emit('questionnaireUpdate')
+                this.$store.commit('SET_CURRENT_QUESTIONNAIRE_ID', null)
+            }).catch((err) => {
+                console.error(err)
+            })
+        }
     },
 
     computed: {
@@ -276,5 +297,28 @@ input[type=submit]:focus {
     flex-direction: column;
     width: 240px;
     margin: 4px 0;
+}
+
+.bttn-field {
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.delete-bttn {
+    margin: 20px;
+    border: solid 1px red;
+    padding: 0 2px;
+    background-color: white;
+    transition: 1s;
+    padding: 4px 0;
+    width: 120px;
+    align-self: center;
+    color: red;
+}
+
+.delete-bttn:hover {
+    background-color: red;
+    color: white;
+    transition: 1s;
 }
 </style>
