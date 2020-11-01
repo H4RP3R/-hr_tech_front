@@ -58,6 +58,7 @@
             <input v-model="score" type="number" name="score" min="0"><br>
 
             <input class="submit-bttn" type="submit" name="submit" :value="bttnText">
+            <button @click="deleteQuestion" type="button" class="delete-bttn" name="delete">Delete</button>
         </div>
     </form>
 </div>
@@ -126,7 +127,6 @@ export default {
             const URL = this.questionId ? BASE_URL + this.questionId : BASE_URL
 
             const formData = new FormData()
-            formData.append('image', this.image)
 
             const data = {
                 'text': this.text,
@@ -137,7 +137,10 @@ export default {
                 'has_correct_answer': this.hasCorrectAnswer,
                 'correct_answers': correctAnswers.join(),
                 'score': +this.score,
-                'image': this.image
+            }
+
+            if (this.image !== null) {
+                data['image'] = this.image
             }
 
             for (let key in data) {
@@ -183,6 +186,23 @@ export default {
 
         handleFileUpload() {
             this.image = this.$refs.file.files[0]
+        },
+
+        deleteQuestion() {
+            const headers = {
+                Authorization: `Token ${this.token = this.$cookies.get('token')}`
+            }
+
+            axios({
+                method: 'delete',
+                url: BASE_URL + this.questionId,
+                'headers': headers
+            }).then(() => {
+                this.closeForm()
+                bus.$emit('questionsUpdate')
+            }).catch((err) => {
+                console.error(err)
+            })
         }
     },
 
@@ -322,5 +342,22 @@ input[type=submit]:hover {
     color: white;
     background-color: rgb(85, 76, 185);
     transition: 1s;
+}
+
+.delete-bttn {
+    border: solid 1px red;
+    padding: 0 2px;
+    background-color: white;
+    transition: 1s;
+    margin-left: 12px;
+    color: red;
+}
+
+.delete-bttn:hover {
+    background-color: red;
+    padding: 0 2px;
+    color: white;
+    transition: 1s;
+    margin-left: 12px;
 }
 </style>
