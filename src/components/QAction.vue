@@ -156,7 +156,7 @@ export default {
 
             const ID = this.$store.getters.START_QUESTIONNAIRE_ID
 
-            axios.get(BASE_URL + '/questionnaire/' + ID, config)
+            axios.get(BASE_URL + 'questionnaire/' + ID, config)
                 .then(response => {
                     this.title = response.data.title
                     this.questions = response.data.questions
@@ -213,7 +213,7 @@ export default {
 
             axios({
                 method: 'put',
-                url: `${BASE_URL}/question_stats/${this.currentQuestionId}`,
+                url: `${BASE_URL}question_stats/${this.currentQuestionId}`,
                 data: stats,
                 'headers': headers
             }).then(() => {
@@ -226,7 +226,7 @@ export default {
             stats.poll = ID
             axios({
                 method: 'put',
-                url: `${BASE_URL}/question_in_poll_stats/${this.currentQuestionId}`,
+                url: `${BASE_URL}question_in_poll_stats/${this.currentQuestionId}`,
                 data: stats,
                 'headers': headers
             }).then(() => {
@@ -243,7 +243,7 @@ export default {
 
             axios({
                 method: 'post',
-                url: `${BASE_URL}/poll_results/`,
+                url: `${BASE_URL}poll_results/`,
                 data: this.pollResults,
                 'headers': headers,
             }).then(() => {
@@ -254,7 +254,7 @@ export default {
         },
 
         imageUrl: function(img) {
-            return BASE_URL + img
+            return BASE_URL.slice(0, -5) + img
         }
     },
 
