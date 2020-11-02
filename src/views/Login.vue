@@ -43,12 +43,21 @@ export default {
     props: ['token'],
 
     methods: {
-        checkForm: function(event) {
-            event.preventDefault()
+        checkForm: function() {
+            if (this.username && this.password) {
+                return true
+            } else {
+                this.errors.push('Fields cannot be empty.')
+                return false
+            }
         },
 
         sendForm: function(event) {
+            this.errors = []
             event.preventDefault()
+            if (this.checkForm() === false) {
+                return
+            }
 
             axios({
                 method: 'post',
@@ -65,6 +74,7 @@ export default {
                 this.$emit('logedIn')
             }).catch((err) => {
                 console.error(err)
+                this.errors.push('Invalid authentication data.')
             })
         },
     },
