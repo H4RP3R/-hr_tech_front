@@ -8,6 +8,13 @@
         <h2>New Question</h2>
     </div>
     <form class="" @submit="sendForm" action="" method="post">
+        <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul class="error">
+                <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
+            </ul>
+        </p>
+
         <ckeditor :editor="editor" v-model="text" :config="editorConfig"></ckeditor>
 
         <div class="image-field">
@@ -89,6 +96,7 @@ export default {
             correctAnswers: [],
             score: 0,
             image: null,
+            errors: [],
 
             editor: ClassicEditor,
             editorData: '<p>Content of the editor.</p>',
@@ -116,6 +124,13 @@ export default {
 
         sendForm: function(event) {
             event.preventDefault()
+            this.errors = []
+
+            if (this.checkForm() === false) {
+                return
+            }
+
+
 
             const headers = {
                 Authorization: `Token ${this.$store.getters.USER_DATA.token}`
@@ -159,7 +174,11 @@ export default {
                 this.closeForm()
                 bus.$emit('questionsUpdate')
             }).catch((err) => {
-                console.error(err)
+                if (err) {
+                    for (let key in err.response.data) {
+                        this.errors.push(err.response.data[key][0])
+                    }
+                }
             })
         },
 
@@ -205,6 +224,30 @@ export default {
             }).catch((err) => {
                 console.error(err)
             })
+        },
+
+        checkForm() {
+            if (this.text == '') {
+                this.errors.push('Text cannot be empty.')
+                return false
+            }
+
+            if (typeof this.image != 'object') {
+                this.image = null
+            }
+
+            if (this.image && this.image.name.length > 50) {
+                this.errors.push('File name is too long.')
+                return false
+            }
+
+            if (this.answer1 == '' || this.answer2 == '' || this.answer3 == '' || this.answer4 ==
+                '') {
+                this.errors.push('Answers cannot be empty.')
+                return false
+            }
+
+            return true
         }
     },
 
@@ -361,5 +404,11 @@ input[type=submit]:hover {
     color: white;
     transition: 1s;
     margin-left: 12px;
+}
+
+.error {
+    color: red;
+    width: 200px;
+    margin: 12px auto;
 }
 </style>

@@ -8,6 +8,13 @@
         <h2>New Questionnaire</h2>
     </div>
     <form @submit="sendForm" action="" method="post">
+        <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul class="error">
+                <li v-for="(error, index) in errors" v-bind:key="index">{{ error }}</li>
+            </ul>
+        </p>
+
         <div class="fields">
 
             <div class="field">
@@ -55,6 +62,7 @@ export default {
             questions: [],
             includedQuestions: [],
             pubDate: null,
+            errors: [],
         }
     },
 
@@ -62,6 +70,7 @@ export default {
         closeForm: function() {
             document.querySelector('.questionnaire-form').style.display = 'none'
             this.$emit('closeForm')
+            bus.$emit('questionsUpdate')
             this.includedQuestions = []
             this.$store.commit('SET_CURRENT_QUESTIONNAIRE_ID', null)
             this.title = ''
@@ -69,6 +78,11 @@ export default {
 
         sendForm: function(event) {
             event.preventDefault()
+            this.errors = []
+
+            if (this.checkForm() === false) {
+                return
+            }
 
             const method = this.questionnaireId ? 'put' : 'post'
             const URL = this.questionnaireId ? BASE_URL + 'questionnaire/' + this.questionnaireId :
@@ -92,7 +106,7 @@ export default {
                     bus.$emit('questionnaireUpdate')
                 this.closeForm()
             }).catch(err => {
-                console.error(err)
+                this.errors.push(err.response.data.title[0])
             })
         },
 
@@ -172,6 +186,13 @@ export default {
             }).catch((err) => {
                 console.error(err)
             })
+        },
+
+        checkForm() {
+            if (this.title == '') {
+                this.errors.push('Title Cannot be empty.')
+                return false
+            }
         }
     },
 
@@ -320,5 +341,11 @@ input[type=submit]:focus {
     background-color: red;
     color: white;
     transition: 1s;
+}
+
+.error {
+    color: red;
+    width: 200px;
+    margin: auto;
 }
 </style>
