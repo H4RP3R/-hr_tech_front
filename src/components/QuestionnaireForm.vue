@@ -44,7 +44,7 @@ import CompactQuestionList from '@/components/CompactQuestionList.vue'
 import { bus } from '../main'
 
 
-const BASE_URL = 'http://localhost:8000/'
+const BASE_URL = 'http://localhost:8000/api/'
 
 export default {
     name: 'questionnaire-form',

@@ -24,7 +24,7 @@
 <script>
 import axios from 'axios'
 
-const URL = 'http://localhost:8000/question_stats/'
+const URL = 'http://localhost:8000/api/question_stats/'
 
 export default {
     name: 'variants-billet',
