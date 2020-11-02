@@ -30,7 +30,7 @@ import axios from 'axios'
 import UserPanel from '@/components/UserPanel.vue'
 import { bus } from '../main'
 
-const BASE_URL = 'http://localhost:8000/api/'
+const BASE_URL = '/api/'
 
 export default {
     name: 'Main',

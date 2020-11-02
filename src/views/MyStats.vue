@@ -25,7 +25,7 @@ import axios from 'axios'
 import UserStatsPanel from '@/components/UserStatsPanel.vue'
 import { bus } from '../main'
 
-const BASE_URL = 'http://localhost:8000/api/'
+const BASE_URL = '/api/'
 
 export default {
     name: 'MyStats',

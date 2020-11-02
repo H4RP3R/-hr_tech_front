@@ -11,7 +11,7 @@ import axios from 'axios'
 import QuestionnaireItem from '@/components/QuestionnaireItem.vue'
 import { bus } from '../main'
 
-const URL = 'http://localhost:8000/api/questionnaire/'
+const URL = '/api/questionnaire/'
 
 export default {
     name: 'questionnaire-list',
