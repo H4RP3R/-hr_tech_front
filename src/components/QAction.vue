@@ -107,6 +107,7 @@ export default {
             this.$emit('closeForm')
             this.$store.commit('SET_START_QUESTIONNAIRE_ID', null)
             this.questionNum = 1
+            this.questions = []
         },
 
         next: function() {
@@ -155,6 +156,10 @@ export default {
             }
 
             const ID = this.$store.getters.START_QUESTIONNAIRE_ID
+
+            if (ID === null) {
+                return
+            }
 
             axios.get(BASE_URL + 'questionnaire/' + ID, config)
                 .then(response => {
@@ -264,7 +269,9 @@ export default {
     },
 
     updated() {
-        this.makeFirstFrameVisible()
+        if (this.questions.length) {
+            this.makeFirstFrameVisible()
+        }
     },
 
     components: {
