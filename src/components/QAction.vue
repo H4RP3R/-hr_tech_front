@@ -17,48 +17,64 @@
             </div>
 
             <div class="variants">
-                <div v-if="q.correct_answers.length > 1" class="variant">
+                <div v-if="q.correct_answers.length > 1">
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant1"
-                            name="variant1" value="1">
-                        <label for="variant1">{{ q.answer1 }}</label>
+                        <label>
+                            <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant1"
+                                name="variant1" value="1">
+                            {{ q.answer1 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant2"
-                            name="variant2" value="2">
-                        <label for="variant2">{{ q.answer2 }}</label>
+                        <label>
+                            <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant2"
+                                name="variant2" value="2">
+                            {{ q.answer2 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant3"
-                            name="variant3" value="3">
-                        <label for="variant3">{{ q.answer3 }}</label>
+                        <label>
+                            <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant3"
+                                name="variant3" value="3">
+                            {{ q.answer3 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant4"
-                            name="variant4" value="4">
-                        <label for="variant4">{{ q.answer4 }}</label>
+                        <label>
+                            <input v-model.number="currentQuestionFormAnswers" type="checkbox" id="variant4"
+                                name="variant4" value="4">
+                            {{ q.answer4 }}
+                        </label>
                     </div>
                 </div>
-                <div v-else class="variant">
+                <div v-else>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant1"
-                            name="variant" value="1">
-                        <label for="variant">{{ q.answer1 }}</label>
+                        <label @click.prevent="checkVariant('variant1')">
+                            <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant1"
+                                name="variant" value="1">
+                            {{ q.answer1 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant2"
-                            name="variant" value="2">
-                        <label for="variant">{{ q.answer2 }}</label>
+                        <label @click.prevent="checkVariant('variant2')">
+                            <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant2"
+                                name="variant" value="2">
+                            {{ q.answer2 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant3"
-                            name="variant" value="3">
-                        <label for="variant">{{ q.answer3 }}</label>
+                        <label @click.prevent="checkVariant('variant3')">
+                            <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant3"
+                                name="variant" value="3">
+                            {{ q.answer3 }}
+                        </label>
                     </div>
                     <div class="variant">
-                        <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant4"
-                            name="variant" value="4">
-                        <label for="variant">{{ q.answer4 }}</label>
+                        <label @click.prevent="checkVariant('variant4')">
+                            <input v-model.number="currentQuestionFormAnswers" type="radio" id="variant4"
+                                name="variant" value="4">
+                            {{ q.answer4 }}
+                        </label>
                     </div>
                 </div>
             </div>
@@ -108,6 +124,7 @@ export default {
             this.$store.commit('SET_START_QUESTIONNAIRE_ID', null)
             this.questionNum = 1
             this.questions = []
+            this.currentQuestionFormAnswers = []
         },
 
         next: function() {
@@ -260,6 +277,15 @@ export default {
 
         imageUrl: function(img) {
             return BASE_URL.slice(0, -5) + img
+        },
+
+        checkVariant: function(v) {
+            const el = document.getElementById(v)
+            el.checked = true
+            const val = parseInt(el.value)
+            if (!this.currentQuestionFormAnswers.includes(val)) {
+                this.currentQuestionFormAnswers = [val]
+            }
         }
     },
 
@@ -355,6 +381,10 @@ input[type=checkbox],
 input[type=radio] {
     margin-right: 10px;
     transform: scale(1.8)
+}
+
+input[type=radio] {
+    pointer-events: none;
 }
 
 .next-bttn,
